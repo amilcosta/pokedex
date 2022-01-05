@@ -22,8 +22,6 @@ export class PokemonService {
             adapter: this.cache.adapter,
         };
         let urlComplete=url+'pokemon/'+name;
-        let urlEvolutions = url+''
-        console.log('URL: ',urlComplete)
 
         const response = await this.httpService.get(urlComplete,config).pipe(map(response => response.data)).toPromise()
         .catch(err => {
@@ -37,6 +35,7 @@ export class PokemonService {
         
 
         let result = { 
+            name: response.name,
             foto: response.sprites.front_default,
             peso: response.weight,
             tipo: response.types,
@@ -68,7 +67,7 @@ export class PokemonService {
     }
 
     async findPokemonSpecies(id_species){
-        console.log('GEt SPECIES')
+        
         const config = {        
             adapter: this.cache.adapter,
         };
