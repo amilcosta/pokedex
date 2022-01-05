@@ -28,11 +28,15 @@ export class PokemonService {
             console.log(err)
         });
 
-        const responseEvolutions = await this.httpService.get(response.species.url).pipe(map(response => response.data)).toPromise()
+        const responseSpecies = await this.httpService.get(response.species.url,config).pipe(map(response => response.data)).toPromise()
         .catch(err => {
             console.log(err)
         });
         
+        const responseEvolutions = await this.httpService.get(responseSpecies.evolution_chain.url,config).pipe(map(response => response.data)).toPromise()
+        .catch(err => {
+            console.log(err)
+        });
 
         let result = { 
             name: response.name,
@@ -40,10 +44,10 @@ export class PokemonService {
             peso: response.weight,
             tipo: response.types,
             habilidades: response.abilities,
-            evoluciones: responseEvolutions.evolves_from_species,
+            evoluciones: responseEvolutions.chain.evolves_to,
             descripcion: {
-                color: responseEvolutions.color.name,
-                formDecription: responseEvolutions.form_descriptions,
+                color: responseSpecies.color.name,
+                formDecription: responseSpecies.form_descriptions,
                 stats: response.stats
             }
         }
